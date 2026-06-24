@@ -89,7 +89,7 @@ function human_delay(int $minutes): string
               </div>
               <div class="delay-row">
                 <label>
-                  Esperar
+                  Enviar após
                   <input type="number" name="steps[0][delay_value]" min="0" value="0" />
                 </label>
                 <label>
@@ -170,7 +170,7 @@ function human_delay(int $minutes): string
         </div>
         <div class="delay-row">
           <label>
-            Esperar
+            Enviar após
             <input type="number" data-name="delay_value" min="0" value="1" />
           </label>
           <label>

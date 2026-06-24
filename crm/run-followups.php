@@ -11,17 +11,29 @@ crm_require_login();
 $items = crm_read_due_followups(20);
 $sent = 0;
 $failed = 0;
+$details = [];
 
 foreach ($items as $item) {
     $result = btzap_send_followup($item);
+    $detail = [
+        'queue_id' => (int) $item['id'],
+        'lead' => (string) ($item['name'] ?? ''),
+        'step_order' => (int) ($item['step_order'] ?? 0),
+        'scheduled_at' => (string) ($item['scheduled_at'] ?? ''),
+    ];
 
     if (($result['ok'] ?? false) === true) {
         crm_update_followup_queue_item((int) $item['id'], 'enviado');
+        $details[] = $detail + ['status' => 'enviado'];
         $sent++;
         continue;
     }
 
     crm_update_followup_queue_item((int) $item['id'], 'falhou', (string) ($result['error'] ?? 'Falha ao enviar.'));
+    $details[] = $detail + [
+        'status' => 'falhou',
+        'error' => (string) ($result['error'] ?? 'Falha ao enviar.'),
+    ];
     $failed++;
 }
 
@@ -30,6 +42,11 @@ $result = [
     'sent' => $sent,
     'failed' => $failed,
 ];
+
+if (($_GET['debug'] ?? '') === '1') {
+    $result['now'] = date('Y-m-d H:i:s');
+    $result['details'] = $details;
+}
 
 if (($_GET['ajax'] ?? '') === '1') {
     header('Content-Type: application/json; charset=utf-8');

@@ -407,7 +407,17 @@ function crm_read_due_followups(int $limit = 20): array
         FROM followup_queue q
         JOIN followup_steps s ON s.id = q.step_id
         JOIN leads l ON l.id = q.lead_id
-        WHERE q.status = "pendente" AND q.scheduled_at <= :now
+        WHERE q.status = "pendente"
+          AND q.scheduled_at <= :now
+          AND NOT EXISTS (
+            SELECT 1
+            FROM followup_queue q2
+            WHERE q2.lead_id = q.lead_id
+              AND q2.flow_id = q.flow_id
+              AND q2.status = "pendente"
+              AND q2.scheduled_at <= :now
+              AND q2.step_order < q.step_order
+          )
         ORDER BY q.scheduled_at ASC
         LIMIT ' . max(1, $limit)
     );

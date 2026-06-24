@@ -87,3 +87,18 @@ foreach ($history as $item) {
 
     echo "\n";
 }
+
+echo "\nLog do processador:\n";
+$logFile = __DIR__ . '/data/followups.log';
+
+if (!is_file($logFile)) {
+    echo "- nenhum log encontrado ainda\n";
+    exit;
+}
+
+$lines = file($logFile, FILE_IGNORE_NEW_LINES) ?: [];
+$lastLines = array_slice($lines, -30);
+
+foreach ($lastLines as $line) {
+    echo $line . "\n";
+}

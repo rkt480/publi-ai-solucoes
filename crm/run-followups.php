@@ -10,12 +10,21 @@ if (PHP_SAPI !== 'cli') {
     crm_require_login();
 }
 
+function followup_log(string $message): void
+{
+    $line = '[' . date('Y-m-d H:i:s') . '] ' . $message . PHP_EOL;
+    @file_put_contents(__DIR__ . '/data/followups.log', $line, FILE_APPEND);
+}
+
+followup_log('Processador iniciado via ' . PHP_SAPI);
+
 $items = crm_read_due_followups(20);
 $sent = 0;
 $failed = 0;
 $details = [];
 
 foreach ($items as $item) {
+    followup_log('Processando fila #' . (int) $item['id'] . ' lead ' . (string) ($item['name'] ?? '') . ' mensagem ' . (int) ($item['step_order'] ?? 0));
     $result = btzap_send_followup($item);
     $detail = [
         'queue_id' => (int) $item['id'],
@@ -26,12 +35,14 @@ foreach ($items as $item) {
 
     if (($result['ok'] ?? false) === true) {
         crm_update_followup_queue_item((int) $item['id'], 'enviado');
+        followup_log('Enviado fila #' . (int) $item['id']);
         $details[] = $detail + ['status' => 'enviado'];
         $sent++;
         continue;
     }
 
     crm_update_followup_queue_item((int) $item['id'], 'falhou', (string) ($result['error'] ?? 'Falha ao enviar.'));
+    followup_log('Falhou fila #' . (int) $item['id'] . ': ' . (string) ($result['error'] ?? 'Falha ao enviar.'));
     $details[] = $detail + [
         'status' => 'falhou',
         'error' => (string) ($result['error'] ?? 'Falha ao enviar.'),
@@ -44,6 +55,8 @@ $result = [
     'sent' => $sent,
     'failed' => $failed,
 ];
+
+followup_log('Processador finalizado: processados=' . count($items) . ' enviados=' . $sent . ' falharam=' . $failed);
 
 if (($_GET['debug'] ?? '') === '1') {
     $result['now'] = date('Y-m-d H:i:s');

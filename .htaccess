@@ -1,0 +1,5 @@
+DirectoryIndex index.html index.php
+
+RewriteEngine On
+
+RewriteRule ^$ landing-page/ [R=302,L]

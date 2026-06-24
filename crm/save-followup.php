@@ -11,6 +11,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $id = (int) ($_POST['id'] ?? 0);
     $steps = [];
     $postedSteps = is_array($_POST['steps'] ?? null) ? $_POST['steps'] : [];
+    $jsonSteps = json_decode((string) ($_POST['steps_json'] ?? ''), true);
+
+    if (is_array($jsonSteps) && count($jsonSteps) > 0) {
+        $postedSteps = $jsonSteps;
+    }
 
     foreach ($postedSteps as $step) {
         $value = max(0, (int) ($step['delay_value'] ?? 0));

@@ -71,6 +71,7 @@ function human_delay(int $minutes): string
         <p>Monte a sequência como você falaria no comercial. Use <code>{{name}}</code>, <code>{{company}}</code> e <code>{{segment}}</code>.</p>
         <form class="flow-form" method="post" action="save-followup.php" id="flowForm">
           <input type="hidden" name="id" id="flowId" value="" />
+          <input type="hidden" name="steps_json" id="stepsJson" value="" />
           <label>
             Nome do fluxo
             <input type="text" name="name" id="flowName" placeholder="Ex: Recuperação lead frio" required />

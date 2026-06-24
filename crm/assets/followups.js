@@ -3,6 +3,7 @@ const addStepButton = document.querySelector("#addFlowStep");
 const template = document.querySelector("#flowStepTemplate");
 const flowForm = document.querySelector("#flowForm");
 const flowId = document.querySelector("#flowId");
+const stepsJson = document.querySelector("#stepsJson");
 const flowName = document.querySelector("#flowName");
 const flowDescription = document.querySelector("#flowDescription");
 const saveFlowButton = document.querySelector("#saveFlowButton");
@@ -48,6 +49,8 @@ function refreshStepNames() {
     const removeButton = step.querySelector("[data-remove-step]");
     removeButton.disabled = steps.length === 1;
   });
+
+  syncStepsJson();
 }
 
 function bindRemoveButton(step) {
@@ -63,6 +66,26 @@ function bindRemoveButton(step) {
   });
 }
 
+function syncStepsJson() {
+  if (!stepsJson) {
+    return;
+  }
+
+  const steps = Array.from(stepsContainer.querySelectorAll("[data-step]")).map((step) => {
+    const delayValueField = step.querySelector("[data-name='delay_value']");
+    const delayUnitField = step.querySelector("[data-name='delay_unit']");
+    const messageField = step.querySelector("[data-name='message']");
+
+    return {
+      delay_value: Number(delayValueField?.value || 0),
+      delay_unit: String(delayUnitField?.value || "minutes"),
+      message: String(messageField?.value || ""),
+    };
+  });
+
+  stepsJson.value = JSON.stringify(steps);
+}
+
 stepsContainer.querySelectorAll("[data-step]").forEach(bindRemoveButton);
 
 addStepButton.addEventListener("click", () => {
@@ -71,6 +94,9 @@ addStepButton.addEventListener("click", () => {
   refreshStepNames();
   clone.querySelector("textarea")?.focus();
 });
+
+stepsContainer.addEventListener("input", syncStepsJson);
+stepsContainer.addEventListener("change", syncStepsJson);
 
 document.querySelectorAll("[data-edit-flow]").forEach((button) => {
   button.addEventListener("click", () => {
@@ -108,3 +134,4 @@ cancelEditButton.addEventListener("click", () => {
 });
 
 refreshStepNames();
+syncStepsJson();

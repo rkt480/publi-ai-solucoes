@@ -137,5 +137,29 @@ flowForm.addEventListener("submit", () => {
   syncStepsJson();
 });
 
+async function runDueFollowups() {
+  try {
+    const response = await fetch("./run-followups.php?ajax=1", {
+      headers: {
+        Accept: "application/json",
+      },
+    });
+
+    if (!response.ok) {
+      return;
+    }
+
+    const result = await response.json();
+
+    if ((result.processed || 0) > 0) {
+      window.location.reload();
+    }
+  } catch (error) {
+    console.error("Falha ao processar follow-ups.", error);
+  }
+}
+
 refreshStepNames();
 syncStepsJson();
+runDueFollowups();
+setInterval(runDueFollowups, 60000);

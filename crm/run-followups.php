@@ -6,7 +6,9 @@ require_once __DIR__ . '/lib/auth.php';
 require_once __DIR__ . '/lib/storage.php';
 require_once __DIR__ . '/lib/btzap.php';
 
-crm_require_login();
+if (PHP_SAPI !== 'cli') {
+    crm_require_login();
+}
 
 $items = crm_read_due_followups(20);
 $sent = 0;

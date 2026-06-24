@@ -149,11 +149,7 @@ async function runDueFollowups() {
       return;
     }
 
-    const result = await response.json();
-
-    if ((result.processed || 0) > 0) {
-      window.location.reload();
-    }
+    await response.json();
   } catch (error) {
     console.error("Falha ao processar follow-ups.", error);
   }

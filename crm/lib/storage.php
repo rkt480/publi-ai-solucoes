@@ -418,10 +418,22 @@ function crm_read_due_followups(int $limit = 20): array
               AND q2.scheduled_at <= :now
               AND q2.step_order < q.step_order
           )
+          AND NOT EXISTS (
+            SELECT 1
+            FROM followup_step_history h
+            WHERE h.lead_id = q.lead_id
+              AND h.flow_id = q.flow_id
+              AND h.status = "enviado"
+              AND h.sent_at >= :recent_sent_at
+          )
         ORDER BY q.scheduled_at ASC
         LIMIT ' . max(1, $limit)
     );
-    $stmt->execute(['now' => date('Y-m-d H:i:s')]);
+    $now = time();
+    $stmt->execute([
+        'now' => date('Y-m-d H:i:s', $now),
+        'recent_sent_at' => date('Y-m-d H:i:s', $now - 55),
+    ]);
 
     return $stmt->fetchAll();
 }

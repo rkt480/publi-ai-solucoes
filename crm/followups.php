@@ -190,6 +190,6 @@ function human_delay(int $minutes): string
     </template>
       </div>
     </div>
-    <script src="./assets/followups.js?v=20260624-2"></script>
+    <script src="./assets/followups.js?v=20260624-3"></script>
   </body>
 </html>

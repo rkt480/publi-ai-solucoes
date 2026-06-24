@@ -288,6 +288,6 @@ function lead_origin_summary(array $lead): string
     </main>
       </div>
     </div>
-    <script src="./assets/crm.js?v=20260621-2"></script>
+    <script src="./assets/crm.js?v=20260624-1"></script>
   </body>
 </html>

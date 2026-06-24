@@ -1,4 +1,13 @@
-const WEBHOOK_URL = "/publiaisolucoes/publi-ai-solucoes/crm/api/leads.php";
+function getWebhookUrl() {
+  const host = window.location.hostname;
+  const isLocal = host === "localhost" || host === "127.0.0.1" || host === "";
+
+  if (isLocal) {
+    return "/publiaisolucoes/publi-ai-solucoes/crm/api/leads.php";
+  }
+
+  return "/crm/api/leads.php";
+}
 
 const leadForm = document.querySelector("#leadForm");
 const formSuccess = document.querySelector("#formSuccess");
@@ -83,14 +92,16 @@ function closeModal() {
 }
 
 async function sendLeadToWebhook(payload) {
-  if (!WEBHOOK_URL) {
+  const webhookUrl = getWebhookUrl();
+
+  if (!webhookUrl) {
     throw new Error("Endpoint do CRM não configurado.");
   }
 
   // CRM: enviar o payload para o webhook/API que cria o lead no CRM.
   // WhatsApp/e-mail: o backend ou automacao deve disparar a notificacao ao receber este payload.
   // Pixel/tag de conversao: disparar evento de conversao apos resposta positiva da API.
-  const response = await fetch(WEBHOOK_URL, {
+  const response = await fetch(webhookUrl, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",

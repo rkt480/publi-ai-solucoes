@@ -133,5 +133,9 @@ cancelEditButton.addEventListener("click", () => {
   refreshStepNames();
 });
 
+flowForm.addEventListener("submit", () => {
+  syncStepsJson();
+});
+
 refreshStepNames();
 syncStepsJson();

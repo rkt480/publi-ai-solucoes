@@ -32,6 +32,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         ];
     }
 
+    if (count($steps) === 0) {
+        http_response_code(422);
+        echo 'Nenhuma mensagem válida foi enviada no follow-up.';
+        exit;
+    }
+
     $name = trim((string) ($_POST['name'] ?? ''));
     $description = trim((string) ($_POST['description'] ?? ''));
 

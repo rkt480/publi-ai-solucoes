@@ -72,9 +72,9 @@ function syncStepsJson() {
   }
 
   const steps = Array.from(stepsContainer.querySelectorAll("[data-step]")).map((step) => {
-    const delayValueField = step.querySelector("[data-name='delay_value']");
-    const delayUnitField = step.querySelector("[data-name='delay_unit']");
-    const messageField = step.querySelector("[data-name='message']");
+    const delayValueField = step.querySelector("[data-name='delay_value'], [name$='[delay_value]']");
+    const delayUnitField = step.querySelector("[data-name='delay_unit'], [name$='[delay_unit]']");
+    const messageField = step.querySelector("[data-name='message'], [name$='[message]']");
 
     return {
       delay_value: Number(delayValueField?.value || 0),

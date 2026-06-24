@@ -40,10 +40,21 @@ try {
     exit;
 }
 
-btzap_send_lead_notification($lead);
+$whatsappResult = ['ok' => false, 'error' => 'Notificação não executada.'];
+
+try {
+    $whatsappResult = btzap_send_lead_notification($lead);
+} catch (Throwable $error) {
+    crm_update_whatsapp_status((string) $lead['id'], 'falhou', 'Erro ao enviar WhatsApp: ' . $error->getMessage());
+    error_log('Erro BTZap no lead ' . (string) $lead['id'] . ': ' . $error->getMessage());
+}
 
 // Integração e-mail: disparar notificação aqui ou chamar uma automação externa.
 // Integração CRM externo: sincronizar este lead com HubSpot, Kommo, Pipedrive, Notion etc.
 
 http_response_code(201);
-echo json_encode(['ok' => true, 'lead_id' => $lead['id']]);
+echo json_encode([
+    'ok' => true,
+    'lead_id' => $lead['id'],
+    'whatsapp' => $whatsappResult,
+]);

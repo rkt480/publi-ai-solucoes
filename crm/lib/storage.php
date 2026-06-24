@@ -303,7 +303,11 @@ function crm_reschedule_followup_flow(int $flowId): void
     );
 
     foreach ($activeLeads as $lead) {
+        $elapsedMinutes = 0;
+
         foreach ($steps as $step) {
+            $elapsedMinutes += max(0, (int) $step['delay_minutes']);
+
             $alreadySent->execute([
                 'lead_id' => $lead['id'],
                 'flow_id' => $flowId,
@@ -329,7 +333,7 @@ function crm_reschedule_followup_flow(int $flowId): void
                 'flow_id' => $flowId,
                 'step_id' => $step['id'],
                 'step_order' => $step['step_order'],
-                'scheduled_at' => date('Y-m-d H:i:s', time() + ((int) $step['delay_minutes'] * 60)),
+                'scheduled_at' => date('Y-m-d H:i:s', time() + ($elapsedMinutes * 60)),
                 'created_at' => date('Y-m-d H:i:s'),
             ]);
         }
@@ -380,8 +384,12 @@ function crm_assign_followup_flow(string $leadId, int $flowId): bool
             VALUES (:lead_id, :flow_id, :step_id, :step_order, :scheduled_at, "pendente", :created_at)'
         );
 
+        $elapsedMinutes = 0;
+
         foreach ($steps as $step) {
-            $scheduledAt = date('Y-m-d H:i:s', time() + ((int) $step['delay_minutes'] * 60));
+            $elapsedMinutes += max(0, (int) $step['delay_minutes']);
+            $scheduledAt = date('Y-m-d H:i:s', time() + ($elapsedMinutes * 60));
+
             $insert->execute([
                 'lead_id' => $leadId,
                 'flow_id' => $flowId,

@@ -1,115 +1,68 @@
-# MazyOS — Sistema operacional do negócio
+# Publi AI Solucoes — MazyOS
 
-Sua empresa roda em cima desse arquivo. Aqui ficam as regras de operação
-do MazyOS — como o Claude lê o contexto, aprende com correções, mantém
-tudo atualizado e cria skills novas conforme a operação evolui.
+## O que e esse workspace
 
-Esse arquivo é editável. Quando o `/instalar` rodar, ele complementa o
-final dessa página com as regras específicas do seu negócio.
+Operacao da Publi AI Solucoes. Esta pasta organiza contexto, marketing, comercial, entregas e materiais da empresa, com foco em vender e entregar landing pages, sites e estruturas de captacao conectadas a CRM.
 
----
+**Estrutura de pastas:**
+- `_memoria/` — quem e a empresa, como falamos, foco atual
+- `identidade/` — marca aplicada em tudo que o sistema gera
+- `marketing/` — campanhas, conteudo, Instagram, trafego pago e Google Meu Negocio
+- `comercial/` — pipeline, propostas, scripts e materiais de venda
+- `operacoes/` — processos internos, checklists e SOPs
+- `projetos/` — projetos de clientes e entregas que cruzam mais de uma area
+- `saidas/` — documentos pontuais
+- `dados/` — arquivos a analisar
+- `tarefas.md` — o que esta em jogo agora
 
-## Contexto do negócio
+## Sobre a empresa
 
-No início de toda conversa, ler os seguintes arquivos (quando existirem
-e estiverem preenchidos):
+Publi AI Solucoes e uma empresa de servicos digitais focada em landing pages, sites e estruturas de captacao com CRM.
 
-1. `_memoria/empresa.md` — quem é o usuário, o que faz, como funciona o negócio
-2. `_memoria/preferencias.md` — tom de voz, estilo de escrita, o que evitar
-3. `_memoria/estrategia.md` — foco atual, prioridades, prazos
+A entrega principal e criar paginas de conversao que enviam os leads para um CRM para controle comercial, ajudando empresarios a captar, receber e acompanhar oportunidades de venda sem perder leads pelo caminho.
 
-Usar essas informações como base pra qualquer resposta ou decisão. Ao
-sugerir prioridades, formatos ou abordagens, considerar o foco atual
-descrito em `estrategia.md`.
+A empresa esta no inicio, ainda validando ICP e buscando os primeiros clientes. Hoje a operacao e tocada sozinho pelo fundador.
 
-Pra qualquer tarefa visual (carrossel, post, landing page), consultar
-`identidade/design-guide.md` como referência de estilo.
+## Setores e responsaveis
 
-Não é necessário listar o que foi lido nem confirmar a leitura. Apenas
-usar o contexto naturalmente.
+- **Marketing:** fundador; conteudo para Instagram, posicionamento, Google Meu Negocio e trafego pago.
+- **Comercial:** fundador; prospeccao, diagnostico, propostas e fechamento.
+- **Operacoes:** fundador; criacao de landing pages, sites, CRM, automacoes e entrega ao cliente.
+- **Financeiro:** fundador; precificacao, controle de recebimentos e custos.
 
----
+## O que mais fazemos aqui
 
-## Fluxo de trabalho
+- Criar posts e ideias de conteudo para Instagram.
+- Montar argumentos de venda e scripts comerciais.
+- Criar propostas para landing pages, sites e CRM.
+- Planejar paginas de conversao e funis simples de captacao.
+- Organizar entregas para clientes.
+- Estruturar campanhas de trafego pago e Google Meu Negocio quando fizer sentido.
 
-Antes de executar qualquer tarefa, verificar se existe skill relevante
-em `.claude/skills/`. Se encontrar, seguir as instruções da skill. Se
-não encontrar, executar a tarefa normalmente.
+## Tom de voz
 
-Ao concluir uma tarefa que não tinha skill mas parece repetível (o
-usuário provavelmente vai pedir de novo no futuro), perguntar:
+Claro, profissional e direto. A comunicacao deve traduzir tecnologia em beneficio pratico para o empresario, sem soar tecnica demais.
 
-> "Isso pode virar uma skill pra próxima vez. Quer que eu crie?"
+Mensagem central: nao vendemos apenas paginas bonitas; criamos uma estrutura para captar, receber e acompanhar oportunidades de venda.
 
-Não perguntar pra tarefas pontuais ou perguntas simples. Só quando o
-padrão de repetição for claro.
+Evitar: girias, linguagem muito tecnica, jargoes de guru, exageros e promessas milagrosas.
 
----
+## Regras do sistema
 
-## Aprender com correções
+- Antes de criar qualquer conteudo, ler `_memoria/empresa.md`, `_memoria/preferencias.md` e `_memoria/estrategia.md`.
+- Materiais comerciais devem deixar claro o diferencial: landing page ou site conectado a CRM e acompanhamento de leads.
+- Propostas comerciais devem ficar em `comercial/propostas/`.
+- Conteudos de Instagram e campanhas devem ficar em `marketing/`.
+- Projetos de clientes devem ficar em `projetos/`.
+- Entregas pontuais e rascunhos finais podem ficar em `saidas/`.
+- Evitar explicacoes tecnicas demais para o cliente final; sempre traduzir para impacto comercial.
 
-Quando o usuário corrigir algo, melhorar uma resposta ou dar uma
-instrução que parece permanente (frases como "na verdade é assim", "não
-faça mais isso", "prefiro assim", "sempre que...", "evita...", "da
-próxima vez..."), perguntar:
+## Ferramentas conectadas
 
-> "Quer que eu salve isso pra não precisar repetir?"
-
-Se sim, identificar onde faz mais sentido salvar:
-
-- **Sobre o negócio** (clientes, serviços, mercado) → `_memoria/empresa.md`
-- **Sobre preferências e estilo** (tom de voz, formato, o que evitar) → `_memoria/preferencias.md`
-- **Sobre prioridades e foco** (projetos, metas, prazos) → `_memoria/estrategia.md`
-- **Regra de comportamento nessa pasta** → próprio `CLAUDE.md`
-
-Salvar com uma linha nova clara, sem reformatar o arquivo inteiro.
-Confirmar mostrando a linha adicionada.
-
-Não perguntar se a correção for óbvia de contexto imediato (ex: "na
-verdade o arquivo se chama X"). Só perguntar quando a informação tiver
-valor duradouro.
-
----
-
-## Manter contexto atualizado
-
-Ao terminar uma tarefa que mudou algo relevante (cliente novo, skill
-nova, mudança de foco, processo novo, ferramenta instalada, estrutura
-alterada), perguntar:
-
-> "Isso mudou algo no teu contexto. Quer que eu atualize a memória?"
-
-Se sim, identificar o que atualizar:
-
-- **Cliente, serviço, ferramenta, equipe** → `_memoria/empresa.md`
-- **Mudança de prioridade ou foco** → `_memoria/estrategia.md`
-- **Tom ou estilo** → `_memoria/preferencias.md`
-- **Pasta, regra de organização, skill criada** → `CLAUDE.md`
-- **Visual (cores, fontes, logo)** → `identidade/design-guide.md`
-
-Mostrar o que vai mudar antes de salvar. Não reformatar o arquivo
-inteiro, só adicionar ou editar a linha relevante.
-
-**Quando NÃO perguntar:**
-- Tarefas pontuais sem impacto no contexto (escrever um email avulso, criar um post)
-- Perguntas simples ou conversas sem ação
-- Mudanças já salvas pelo bloco "Aprender com correções"
-
-**Dica:** rode `/atualizar` pra uma varredura completa quando houver dúvida.
-
----
-
-## Criação de skills
-
-Quando o usuário pedir skill nova:
-
-1. Verificar se existe template relevante em `templates/skills/`. Se
-   existir, usar como base e adaptar pro contexto
-2. Perguntar se é específica desse projeto ou útil em qualquer:
-   - Específica → `.claude/skills/nome-da-skill/SKILL.md` (local)
-   - Universal → `~/.claude/skills/nome-da-skill/SKILL.md` (global)
-3. Ler `_memoria/empresa.md` e `_memoria/preferencias.md` pra calibrar
-   o conteúdo da skill ao contexto do negócio
-4. Se a skill precisar de arquivos de apoio (templates, exemplos),
-   criar dentro da pasta da skill
-5. Seguir o fluxo da skill-creator nativa do Claude Code
+- [ ] Notion
+- [ ] Gmail
+- [ ] Google Calendar
+- [ ] Google Ads
+- [ ] Meta Ads
+- [ ] WhatsApp
+- [ ] CRM

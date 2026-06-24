@@ -1,11 +1,5 @@
 # Identidade visual
 
-> Como a marca aparece em tudo que o MazyOS gera.
-> As skills de conteúdo, carrossel e post leem esse arquivo antes de criar qualquer visual.
-> Edite quando a marca evoluir.
-
----
-
 ## Cores
 
 - **Fundo principal:**
@@ -18,8 +12,6 @@
 
 - **Cor proibida:**
 
----
-
 ## Tipografia
 
 - **Títulos e destaques:**
@@ -28,11 +20,9 @@
 
 - **Peso do título:**
 
----
-
 ## Estilo geral
 
----
+Identidade visual ainda no zero. Ate que a marca seja definida, manter materiais com visual profissional, limpo e orientado a conversao, evitando exageros visuais.
 
 ## Elementos-chave
 
@@ -41,19 +31,19 @@
 - Botões:
 - Sombras:
 
----
-
 ## O que NUNCA fazer
 
----
+- Usar visual amador ou excessivamente chamativo.
+- Deixar a pagina parecer apenas bonita, sem clareza de conversao.
+- Poluir materiais com informacao tecnica demais.
 
 ## Logo
 
-- **Arquivo:** *(ex: identidade/logo.png ou identidade/logo.svg)*
-- **Versão pra fundo escuro:** *(se tiver — ex: identidade/logo-branco.png)*
-- **Onde usar:** slide final do carrossel (CTA), header de propostas, slides de apresentação
+- **Arquivo:**
+- **Versao pra fundo escuro:**
+- **Onde usar:** slide final do carrossel (CTA), header de propostas, slides de apresentacao
 - **Tamanho sugerido:** largura entre 120-200px nos HTMLs
 
----
+## Observacoes adicionais
 
-## Observações adicionais
+A empresa ainda nao tem logo. Quando a identidade visual for definida, preencher cores, fontes e arquivos de logo neste documento.

@@ -8,6 +8,7 @@ const flowName = document.querySelector("#flowName");
 const flowDescription = document.querySelector("#flowDescription");
 const saveFlowButton = document.querySelector("#saveFlowButton");
 const cancelEditButton = document.querySelector("#cancelEditFlow");
+const csrfToken = document.querySelector("meta[name='csrf-token']")?.content || "";
 
 function splitMinutes(minutes) {
   if (minutes >= 1440 && minutes % 1440 === 0) {
@@ -140,9 +141,12 @@ flowForm.addEventListener("submit", () => {
 async function runDueFollowups() {
   try {
     const response = await fetch("./run-followups.php?ajax=1", {
+      method: "POST",
       headers: {
         Accept: "application/json",
+        "X-CSRF-Token": csrfToken,
       },
+      body: new URLSearchParams({ ajax: "1" }),
     });
 
     if (!response.ok) {

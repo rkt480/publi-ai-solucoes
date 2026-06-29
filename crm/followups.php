@@ -34,6 +34,7 @@ function human_delay(int $minutes): string
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="csrf-token" content="<?= htmlspecialchars(crm_csrf_token()) ?>" />
     <title>Fluxos de Follow-up | CRM</title>
     <link rel="stylesheet" href="./assets/crm.css?v=20260621-5" />
   </head>
@@ -70,6 +71,7 @@ function human_delay(int $minutes): string
         <h2>Criar novo fluxo</h2>
         <p>Monte a sequência como você falaria no comercial. Use <code>{{name}}</code>, <code>{{company}}</code> e <code>{{segment}}</code>.</p>
         <form class="flow-form" method="post" action="save-followup.php" id="flowForm">
+          <input type="hidden" name="_csrf_token" value="<?= htmlspecialchars(crm_csrf_token()) ?>" />
           <input type="hidden" name="id" id="flowId" value="" />
           <input type="hidden" name="steps_json" id="stepsJson" value="" />
           <label>
@@ -152,6 +154,7 @@ function human_delay(int $minutes): string
                 <div class="flow-item-actions">
                   <button class="secondary-action" type="button" data-edit-flow>Editar</button>
                   <form method="post" action="delete-followup.php" onsubmit="return confirm('Excluir este fluxo?');">
+                    <input type="hidden" name="_csrf_token" value="<?= htmlspecialchars(crm_csrf_token()) ?>" />
                     <input type="hidden" name="id" value="<?= (int) $flow['id'] ?>" />
                     <button class="danger" type="submit">Excluir fluxo</button>
                   </form>

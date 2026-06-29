@@ -1,6 +1,7 @@
 const cards = document.querySelectorAll(".kanban-card");
 const dropzones = document.querySelectorAll(".kanban-dropzone");
 const detailButtons = document.querySelectorAll("[data-toggle-details]");
+const csrfToken = document.querySelector("meta[name='csrf-token']")?.content || "";
 
 let draggedCard = null;
 const modalOrigins = new WeakMap();
@@ -21,6 +22,7 @@ async function persistLeadStatus(leadId, status) {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
+      "X-CSRF-Token": csrfToken,
     },
     body: JSON.stringify({ id: leadId, status }),
   });
@@ -190,9 +192,12 @@ document.querySelectorAll(".lead-modal-tabs [data-lead-tab]").forEach((tabButton
 async function runDueFollowups() {
   try {
     const response = await fetch("./run-followups.php?ajax=1", {
+      method: "POST",
       headers: {
         Accept: "application/json",
+        "X-CSRF-Token": csrfToken,
       },
+      body: new URLSearchParams({ ajax: "1" }),
     });
 
     if (!response.ok) {

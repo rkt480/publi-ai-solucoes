@@ -16,6 +16,8 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     exit;
 }
 
+crm_require_valid_csrf();
+
 $payload = json_decode(file_get_contents('php://input') ?: '{}', true);
 
 if (!is_array($payload)) {

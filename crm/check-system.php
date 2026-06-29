@@ -2,6 +2,10 @@
 
 declare(strict_types=1);
 
+require_once __DIR__ . '/lib/auth.php';
+
+crm_require_login();
+
 header('Content-Type: text/plain; charset=utf-8');
 header('X-Content-Type-Options: nosniff');
 

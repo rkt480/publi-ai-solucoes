@@ -8,6 +8,7 @@ return [
     'admin_user' => 'admin',
     'admin_password_hash' => 'cole-aqui-o-hash-gerado-com-password_hash',
     'company_name' => 'Publi AI Soluções',
+    'auto_migrate' => false,
     'db' => [
         'host' => '127.0.0.1',
         'port' => 3306,

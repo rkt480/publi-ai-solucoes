@@ -47,6 +47,7 @@ function getFormPayload(form) {
     segment: data.get("segment"),
     advertises: data.get("advertises"),
     message: data.get("message"),
+    website: data.get("website") || "",
     page: window.location.href,
     ...getTrackingParams(),
     submittedAt: new Date().toISOString(),

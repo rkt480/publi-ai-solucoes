@@ -9,6 +9,8 @@ require_once __DIR__ . '/lib/btzap.php';
 crm_require_login();
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    crm_require_valid_csrf();
+
     $lead = crm_find_lead((string) ($_POST['id'] ?? ''));
 
     if ($lead !== null) {

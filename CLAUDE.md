@@ -49,7 +49,8 @@ Evitar: girias, linguagem muito tecnica, jargoes de guru, exageros e promessas m
 
 ## Regras do sistema
 
-- Antes de criar qualquer conteudo, ler `_memoria/empresa.md`, `_memoria/preferencias.md` e `_memoria/estrategia.md`.
+- Antes de criar qualquer conteudo, ler `_memoria/empresa.md`, `_memoria/preferencias.md`, `_memoria/estrategia.md`, `_memoria/conteudo-magnetico.md`, `_memoria/referencias-layout-posts.md` e `marketing/conteudo/historico-conteudos.md`.
+- Antes de propor novo post, verificar `marketing/conteudo/historico-conteudos.md` para nao repetir tema, hook, promessa, CTA ou abordagem visual ja usada.
 - Materiais comerciais devem deixar claro o diferencial: landing page ou site conectado a CRM e acompanhamento de leads.
 - Propostas comerciais devem ficar em `comercial/propostas/`.
 - Conteudos de Instagram e campanhas devem ficar em `marketing/`.

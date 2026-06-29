@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 require_once __DIR__ . '/lib/auth.php';
 
+crm_send_security_headers();
+
 if (crm_is_logged_in()) {
     header('Location: index.php');
     exit;
@@ -15,12 +17,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $user = trim((string) ($_POST['user'] ?? ''));
     $password = (string) ($_POST['password'] ?? '');
 
-    if (crm_attempt_login($user, $password)) {
+    if (!crm_verify_csrf_token(crm_request_csrf_token())) {
+        $error = 'Sessão expirada. Atualize a página e tente novamente.';
+    } elseif (crm_login_is_limited($user)) {
+        $error = 'Muitas tentativas. Aguarde alguns minutos e tente novamente.';
+    } elseif (crm_attempt_login($user, $password)) {
+        crm_clear_login_failures($user);
         header('Location: index.php');
         exit;
+    } else {
+        crm_record_login_failure($user);
+        $error = 'Usuário ou senha inválidos.';
     }
-
-    $error = 'Usuário ou senha inválidos.';
 }
 ?>
 <!doctype html>
@@ -42,6 +50,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
       <?php endif; ?>
 
       <form method="post">
+        <input type="hidden" name="_csrf_token" value="<?= htmlspecialchars(crm_csrf_token()) ?>" />
         <label>
           Usuário
           <input type="text" name="user" autocomplete="username" required />

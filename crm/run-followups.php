@@ -8,6 +8,15 @@ require_once __DIR__ . '/lib/btzap.php';
 
 if (PHP_SAPI !== 'cli') {
     crm_require_login();
+
+    if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+        http_response_code(405);
+        header('Content-Type: text/plain; charset=utf-8');
+        echo 'Método não permitido.';
+        exit;
+    }
+
+    crm_require_valid_csrf();
 }
 
 function followup_log(string $message): void
@@ -63,12 +72,12 @@ try {
     throw $error;
 }
 
-if (($_GET['debug'] ?? '') === '1') {
+if (($_POST['debug'] ?? $_GET['debug'] ?? '') === '1') {
     $result['now'] = date('Y-m-d H:i:s');
     $result['details'] = $details;
 }
 
-if (($_GET['ajax'] ?? '') === '1') {
+if (($_POST['ajax'] ?? $_GET['ajax'] ?? '') === '1') {
     header('Content-Type: application/json; charset=utf-8');
     echo json_encode($result);
     exit;

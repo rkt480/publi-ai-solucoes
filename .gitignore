@@ -27,5 +27,8 @@ dados/*
 
 # CRM local
 crm/config.php
+crm/config*.php
+!crm/config.example.php
 crm/data/*
 !crm/data/.htaccess
+

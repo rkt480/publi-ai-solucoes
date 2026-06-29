@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 require_once dirname(__DIR__) . '/lib/storage.php';
 require_once dirname(__DIR__) . '/lib/btzap.php';
+require_once dirname(__DIR__) . '/lib/security.php';
 
 header('Content-Type: application/json; charset=utf-8');
 header('X-Content-Type-Options: nosniff');
@@ -22,6 +23,18 @@ if (!is_array($payload)) {
     exit;
 }
 
+if (trim((string) ($payload['website'] ?? '')) !== '') {
+    http_response_code(201);
+    echo json_encode(['ok' => true]);
+    exit;
+}
+
+if (crm_throttle_is_limited('lead-submit', 'public-form', 6, 600)) {
+    http_response_code(429);
+    echo json_encode(['ok' => false, 'error' => 'Muitas tentativas. Tente novamente em alguns minutos.']);
+    exit;
+}
+
 $required = ['name', 'whatsapp', 'company', 'advertises'];
 
 foreach ($required as $field) {
@@ -31,6 +44,8 @@ foreach ($required as $field) {
         exit;
     }
 }
+
+crm_throttle_record('lead-submit', 'public-form', 600);
 
 try {
     $lead = crm_create_lead($payload);

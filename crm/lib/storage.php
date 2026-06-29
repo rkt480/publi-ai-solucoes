@@ -26,7 +26,9 @@ function crm_db(): PDO
         PDO::ATTR_EMULATE_PREPARES => false,
     ]);
 
-    crm_ensure_lead_tracking_columns($pdo);
+    if (($config['auto_migrate'] ?? false) === true) {
+        crm_ensure_lead_tracking_columns($pdo);
+    }
 
     return $pdo;
 }

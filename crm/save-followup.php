@@ -8,6 +8,8 @@ require_once __DIR__ . '/lib/storage.php';
 crm_require_login();
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    crm_require_valid_csrf();
+
     $id = (int) ($_POST['id'] ?? 0);
     $steps = [];
     $postedSteps = is_array($_POST['steps'] ?? null) ? $_POST['steps'] : [];

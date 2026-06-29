@@ -56,6 +56,7 @@ function lead_origin_summary(array $lead): string
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="csrf-token" content="<?= htmlspecialchars(crm_csrf_token()) ?>" />
     <title>CRM de Leads | <?= htmlspecialchars((string) $config['company_name']) ?></title>
     <link rel="stylesheet" href="./assets/crm.css?v=20260621-5" />
   </head>
@@ -143,6 +144,7 @@ function lead_origin_summary(array $lead): string
                     <div class="lead-actions">
                       <button class="details-toggle" type="button" data-toggle-details>Detalhes</button>
                       <form method="post" action="delete.php" onsubmit="return confirm('Excluir este lead?');">
+                        <input type="hidden" name="_csrf_token" value="<?= htmlspecialchars(crm_csrf_token()) ?>" />
                         <input type="hidden" name="id" value="<?= htmlspecialchars((string) ($lead['id'] ?? '')) ?>" />
                         <button type="submit" class="danger">Excluir</button>
                       </form>
@@ -246,6 +248,7 @@ function lead_origin_summary(array $lead): string
                             <div class="lead-tab-panel" data-lead-panel="observacoes" hidden>
                               <h3>Observações comerciais</h3>
                       <form class="update-form" method="post" action="update.php">
+                        <input type="hidden" name="_csrf_token" value="<?= htmlspecialchars(crm_csrf_token()) ?>" />
                         <input type="hidden" name="id" value="<?= htmlspecialchars((string) ($lead['id'] ?? '')) ?>" />
                         <input type="hidden" name="status" value="<?= htmlspecialchars($status) ?>" />
                         <label>
@@ -259,6 +262,7 @@ function lead_origin_summary(array $lead): string
                             <div class="lead-tab-panel" data-lead-panel="followup" hidden>
                               <h3>Fluxo de follow-up</h3>
                       <form class="update-form" method="post" action="assign-followup.php">
+                        <input type="hidden" name="_csrf_token" value="<?= htmlspecialchars(crm_csrf_token()) ?>" />
                         <input type="hidden" name="lead_id" value="<?= htmlspecialchars((string) ($lead['id'] ?? '')) ?>" />
                         <label>
                           Fluxo de follow-up

@@ -29,6 +29,27 @@ const stepCounter = document.querySelector("#stepCounter");
 
 let currentStep = 0;
 
+function getCookieValue(name) {
+  return document.cookie
+    .split(";")
+    .map((cookie) => cookie.trim())
+    .find((cookie) => cookie.startsWith(`${name}=`))
+    ?.split("=")
+    .slice(1)
+    .join("=") || "";
+}
+
+function getFacebookClickId(params) {
+  const fbc = getCookieValue("_fbc");
+  const fbclid = params.get("fbclid") || "";
+
+  if (fbc || !fbclid) {
+    return fbc;
+  }
+
+  return `fb.1.${Date.now()}.${fbclid}`;
+}
+
 function getTrackingParams() {
   const params = new URLSearchParams(window.location.search);
 
@@ -40,6 +61,8 @@ function getTrackingParams() {
     utm_term: params.get("utm_term") || "",
     referrer: document.referrer || "",
     landing_path: `${window.location.pathname}${window.location.search}`,
+    fbp: getCookieValue("_fbp"),
+    fbc: getFacebookClickId(params),
   };
 }
 

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 require_once dirname(__DIR__) . '/lib/storage.php';
 require_once dirname(__DIR__) . '/lib/btzap.php';
+require_once dirname(__DIR__) . '/lib/meta-capi.php';
 require_once dirname(__DIR__) . '/lib/security.php';
 
 header('Content-Type: application/json; charset=utf-8');
@@ -57,6 +58,17 @@ try {
 }
 
 $whatsappResult = ['ok' => false, 'error' => 'Notificação não executada.'];
+$metaResult = ['ok' => false, 'error' => 'Meta CAPI não executada.'];
+
+try {
+    $metaResult = meta_capi_send_lead_created($lead, $payload);
+
+    if (($metaResult['ok'] ?? false) !== true && ($metaResult['skipped'] ?? false) !== true) {
+        error_log('Erro Meta CAPI Lead ' . (string) $lead['id'] . ': ' . (string) ($metaResult['error'] ?? 'Erro desconhecido.'));
+    }
+} catch (Throwable $error) {
+    error_log('Erro Meta CAPI Lead ' . (string) $lead['id'] . ': ' . $error->getMessage());
+}
 
 try {
     $whatsappResult = btzap_send_lead_notification($lead);
@@ -73,4 +85,5 @@ echo json_encode([
     'ok' => true,
     'lead_id' => $lead['id'],
     'whatsapp' => $whatsappResult,
+    'meta' => $metaResult,
 ]);

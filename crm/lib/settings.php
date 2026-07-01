@@ -48,3 +48,21 @@ function crm_whatsapp_number(): string
     $settings = crm_read_settings();
     return crm_normalize_whatsapp_number((string) ($settings['whatsapp_number'] ?? ''));
 }
+
+function crm_meta_capi_settings(): array
+{
+    $settings = crm_read_settings();
+
+    return [
+        'pixel_id' => trim((string) ($settings['meta_pixel_id'] ?? '')),
+        'access_token' => trim((string) ($settings['meta_access_token'] ?? '')),
+        'test_event_code' => trim((string) ($settings['meta_test_event_code'] ?? '')),
+    ];
+}
+
+function crm_meta_capi_is_configured(): bool
+{
+    $meta = crm_meta_capi_settings();
+
+    return $meta['pixel_id'] !== '' && $meta['access_token'] !== '';
+}

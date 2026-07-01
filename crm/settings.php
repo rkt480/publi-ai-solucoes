@@ -10,21 +10,28 @@ crm_require_login();
 $saved = ($_GET['saved'] ?? '') === '1';
 $error = '';
 $settings = crm_read_settings();
-$whatsappNumber = (string) ($settings['whatsapp_number'] ?? crm_whatsapp_number());
+$whatsappNumber = (string) ($settings['whatsapp_number'] ?? '');
+$metaSettings = crm_meta_capi_settings();
+$metaPixelId = $metaSettings['pixel_id'];
+$metaAccessToken = $metaSettings['access_token'];
+$metaTestEventCode = $metaSettings['test_event_code'];
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     crm_require_valid_csrf();
 
-    $number = crm_normalize_whatsapp_number((string) ($_POST['whatsapp_number'] ?? ''));
-
-    if ($number === '') {
-        $error = 'Informe o número do WhatsApp de atendimento.';
-    } else {
-        $settings['whatsapp_number'] = $number;
-        crm_write_settings($settings);
-        header('Location: settings.php?saved=1');
-        exit;
+    if (($_POST['settings_section'] ?? '') === 'whatsapp') {
+        $settings['whatsapp_number'] = crm_normalize_whatsapp_number((string) ($_POST['whatsapp_number'] ?? ''));
     }
+
+    if (($_POST['settings_section'] ?? '') === 'meta') {
+        $settings['meta_pixel_id'] = preg_replace('/\D+/', '', (string) ($_POST['meta_pixel_id'] ?? '')) ?? '';
+        $settings['meta_access_token'] = trim((string) ($_POST['meta_access_token'] ?? ''));
+        $settings['meta_test_event_code'] = trim((string) ($_POST['meta_test_event_code'] ?? ''));
+    }
+
+    crm_write_settings($settings);
+    header('Location: settings.php?saved=1');
+    exit;
 }
 ?>
 <!doctype html>
@@ -56,8 +63,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         <header class="app-header">
           <div>
-            <p class="eyebrow">Atendimento</p>
-            <h1>Configurações do WhatsApp</h1>
+            <p class="eyebrow">Integrações</p>
+            <h1>Configurações do CRM</h1>
           </div>
         </header>
 
@@ -75,11 +82,34 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
             <form class="flow-form" method="post">
               <input type="hidden" name="_csrf_token" value="<?= htmlspecialchars(crm_csrf_token()) ?>" />
+              <input type="hidden" name="settings_section" value="whatsapp" />
               <label>
                 WhatsApp conectado/atendimento
-                <input type="tel" name="whatsapp_number" value="<?= htmlspecialchars($whatsappNumber) ?>" placeholder="Ex: 5511999999999" required />
+                <input type="tel" name="whatsapp_number" value="<?= htmlspecialchars($whatsappNumber) ?>" placeholder="Ex: 5511999999999" />
               </label>
-              <button type="submit">Salvar número</button>
+              <button type="submit">Salvar configurações</button>
+            </form>
+          </section>
+
+          <section class="automation-card">
+            <h2>Meta Ads</h2>
+
+            <form class="flow-form" method="post">
+              <input type="hidden" name="_csrf_token" value="<?= htmlspecialchars(crm_csrf_token()) ?>" />
+              <input type="hidden" name="settings_section" value="meta" />
+              <label>
+                Pixel ID
+                <input type="text" name="meta_pixel_id" value="<?= htmlspecialchars($metaPixelId) ?>" placeholder="Ex: 123456789012345" inputmode="numeric" />
+              </label>
+              <label>
+                Access Token
+                <input type="password" name="meta_access_token" value="<?= htmlspecialchars($metaAccessToken) ?>" placeholder="Cole o token da API de Conversões" autocomplete="off" />
+              </label>
+              <label>
+                Código de teste
+                <input type="text" name="meta_test_event_code" value="<?= htmlspecialchars($metaTestEventCode) ?>" placeholder="Ex: TEST12345" autocomplete="off" />
+              </label>
+              <button type="submit">Salvar configurações</button>
             </form>
           </section>
         </main>

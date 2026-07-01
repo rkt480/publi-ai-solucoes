@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 require_once dirname(__DIR__) . '/lib/auth.php';
 require_once dirname(__DIR__) . '/lib/storage.php';
+require_once dirname(__DIR__) . '/lib/meta-capi.php';
 
 header('Content-Type: application/json; charset=utf-8');
 header('X-Content-Type-Options: nosniff');
@@ -36,10 +37,27 @@ if ($id === '' || !in_array($status, $allowedStatuses, true)) {
     exit;
 }
 
+$leadBeforeUpdate = crm_find_lead($id);
+
 if (!crm_update_lead($id, ['status' => $status])) {
     http_response_code(404);
     echo json_encode(['ok' => false, 'error' => 'Lead não encontrado.']);
     exit;
 }
 
-echo json_encode(['ok' => true]);
+$metaResult = ['ok' => false, 'skipped' => true, 'error' => 'Meta CAPI não executada.'];
+
+if (is_array($leadBeforeUpdate) && (string) ($leadBeforeUpdate['status'] ?? '') !== $status) {
+    try {
+        $leadBeforeUpdate['status'] = $status;
+        $metaResult = meta_capi_send_status_event($leadBeforeUpdate, $status);
+
+        if (($metaResult['ok'] ?? false) !== true && ($metaResult['skipped'] ?? false) !== true) {
+            error_log('Erro Meta CAPI status ' . $status . ' lead ' . $id . ': ' . (string) ($metaResult['error'] ?? 'Erro desconhecido.'));
+        }
+    } catch (Throwable $error) {
+        error_log('Erro Meta CAPI status ' . $status . ' lead ' . $id . ': ' . $error->getMessage());
+    }
+}
+
+echo json_encode(['ok' => true, 'meta' => $metaResult]);

@@ -50,6 +50,7 @@ crm_throttle_record('lead-submit', 'public-form', 600);
 try {
     $lead = crm_create_lead($payload);
 } catch (Throwable $error) {
+    error_log('Erro ao salvar lead no CRM: ' . $error->getMessage());
     http_response_code(500);
     echo json_encode(['ok' => false, 'error' => 'Não foi possível salvar o lead no CRM.']);
     exit;

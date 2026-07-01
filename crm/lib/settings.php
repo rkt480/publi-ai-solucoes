@@ -46,18 +46,5 @@ function crm_normalize_whatsapp_number(string $number): string
 function crm_whatsapp_number(): string
 {
     $settings = crm_read_settings();
-    $settingsNumber = crm_normalize_whatsapp_number((string) ($settings['whatsapp_number'] ?? ''));
-
-    if ($settingsNumber !== '') {
-        return $settingsNumber;
-    }
-
-    $config = require dirname(__DIR__) . '/config.php';
-    $btzap = is_array($config['btzap'] ?? null) ? $config['btzap'] : [];
-
-    return crm_normalize_whatsapp_number((string) (
-        $btzap['public_whatsapp_number']
-        ?? $btzap['internal_notification_number']
-        ?? ''
-    ));
+    return crm_normalize_whatsapp_number((string) ($settings['whatsapp_number'] ?? ''));
 }

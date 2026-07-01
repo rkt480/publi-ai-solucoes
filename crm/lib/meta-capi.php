@@ -4,6 +4,23 @@ declare(strict_types=1);
 
 require_once __DIR__ . '/settings.php';
 
+function meta_capi_log(string $message, array $context = []): void
+{
+    $dir = dirname(__DIR__) . '/data';
+
+    if (!is_dir($dir)) {
+        @mkdir($dir, 0755, true);
+    }
+
+    $line = '[' . date('Y-m-d H:i:s') . '] ' . $message;
+
+    if ($context !== []) {
+        $line .= ' ' . json_encode($context, JSON_UNESCAPED_UNICODE);
+    }
+
+    @file_put_contents($dir . '/meta-capi.log', $line . PHP_EOL, FILE_APPEND);
+}
+
 function meta_capi_hash(string $value): string
 {
     $trimmed = trim($value);
@@ -83,6 +100,7 @@ function meta_capi_event_source_url(array $lead, array $context = []): string
 function meta_capi_send_event(string $eventName, array $lead, array $context = []): array
 {
     if (!crm_meta_capi_is_configured()) {
+        meta_capi_log('Meta CAPI ignorada: configuração ausente.', ['event_name' => $eventName]);
         return ['ok' => false, 'skipped' => true, 'error' => 'Meta CAPI não configurada.'];
     }
 
@@ -130,6 +148,7 @@ function meta_capi_send_event(string $eventName, array $lead, array $context = [
     $ch = curl_init($url);
 
     if ($ch === false) {
+        meta_capi_log('Meta CAPI erro: curl_init falhou.', ['event_name' => $eventName]);
         return ['ok' => false, 'error' => 'Não foi possível iniciar o cURL da Meta CAPI.'];
     }
 
@@ -150,14 +169,32 @@ function meta_capi_send_event(string $eventName, array $lead, array $context = [
     curl_close($ch);
 
     if ($body === false || $curlError !== '') {
+        meta_capi_log('Meta CAPI erro cURL.', [
+            'event_name' => $eventName,
+            'event_id' => $eventId,
+            'error' => $curlError ?: 'Erro desconhecido no cURL da Meta CAPI.',
+        ]);
         return ['ok' => false, 'error' => $curlError ?: 'Erro desconhecido no cURL da Meta CAPI.'];
     }
 
     $decoded = json_decode((string) $body, true);
 
     if ($httpCode < 200 || $httpCode >= 300) {
+        meta_capi_log('Meta CAPI erro HTTP.', [
+            'event_name' => $eventName,
+            'event_id' => $eventId,
+            'http_code' => $httpCode,
+            'response' => $decoded,
+        ]);
         return ['ok' => false, 'error' => 'Meta CAPI HTTP ' . $httpCode . ': ' . $body, 'response' => $decoded];
     }
+
+    meta_capi_log('Meta CAPI evento enviado.', [
+        'event_name' => $eventName,
+        'event_id' => $eventId,
+        'http_code' => $httpCode,
+        'response' => $decoded,
+    ]);
 
     return ['ok' => true, 'response' => $decoded];
 }
@@ -188,7 +225,7 @@ function meta_capi_send_status_event(array $lead, string $status): array
         return meta_capi_send_event('PropostaEnviada', $lead, [
             'status' => $status,
             'content_name' => 'Proposta enviada',
-            'action_source' => 'system_generated',
+            'event_id' => 'crm_' . (string) ($lead['id'] ?? bin2hex(random_bytes(8))) . '_proposta_' . time(),
         ]);
     }
 
@@ -197,8 +234,8 @@ function meta_capi_send_status_event(array $lead, string $status): array
             'status' => $status,
             'content_name' => 'Venda fechada',
             'currency' => 'BRL',
-            'value' => 0,
-            'action_source' => 'system_generated',
+            'value' => 1,
+            'event_id' => 'crm_' . (string) ($lead['id'] ?? bin2hex(random_bytes(8))) . '_purchase_' . time(),
         ]);
     }
 

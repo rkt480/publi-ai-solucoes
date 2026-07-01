@@ -31,6 +31,12 @@ async function persistLeadStatus(leadId, status) {
     const message = await response.text();
     throw new Error(message || "Não foi possível mover o lead.");
   }
+
+  const data = await response.json();
+
+  if (data.meta && data.meta.ok === false && data.meta.skipped !== true) {
+    console.warn("Meta CAPI não confirmou o evento.", data.meta);
+  }
 }
 
 cards.forEach((card) => {

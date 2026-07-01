@@ -331,6 +331,6 @@ function lead_whatsapp_status_label(array $lead): string
     </main>
       </div>
     </div>
-    <script src="./assets/crm.js?v=20260701-1900"></script>
+    <script src="./assets/crm.js?v=20260701-1945"></script>
   </body>
 </html>

@@ -116,6 +116,27 @@ function setWhatsAppConfirmState(payload = null) {
   whatsappConfirm.hidden = true;
 }
 
+function loadGoogleTagManager(containerId) {
+  const gtmId = String(containerId || "").trim().toUpperCase();
+
+  if (!/^GTM-[A-Z0-9]+$/.test(gtmId) || window.__publiGtmLoaded) {
+    return;
+  }
+
+  window.__publiGtmLoaded = true;
+  window.dataLayer = window.dataLayer || [];
+  window.dataLayer.push({
+    "gtm.start": new Date().getTime(),
+    event: "gtm.js",
+  });
+
+  const firstScript = document.getElementsByTagName("script")[0];
+  const gtmScript = document.createElement("script");
+  gtmScript.async = true;
+  gtmScript.src = `https://www.googletagmanager.com/gtm.js?id=${encodeURIComponent(gtmId)}`;
+  firstScript.parentNode.insertBefore(gtmScript, firstScript);
+}
+
 async function loadPublicConfig() {
   try {
     const response = await fetch(getCrmApiUrl("public-config.php"), {
@@ -130,6 +151,7 @@ async function loadPublicConfig() {
 
     const data = await response.json();
     confirmationWhatsAppNumber = String(data.whatsapp_number || "");
+    loadGoogleTagManager(data.google_tag_manager_id);
     setWhatsAppConfirmState();
   } catch (error) {
     console.error("Não foi possível carregar o número de WhatsApp.", error);

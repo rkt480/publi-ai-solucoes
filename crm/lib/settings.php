@@ -66,3 +66,20 @@ function crm_meta_capi_is_configured(): bool
 
     return $meta['pixel_id'] !== '' && $meta['access_token'] !== '';
 }
+
+function crm_normalize_gtm_id(string $gtmId): string
+{
+    $normalized = strtoupper(trim($gtmId));
+
+    if ($normalized === '') {
+        return '';
+    }
+
+    return preg_match('/^GTM-[A-Z0-9]+$/', $normalized) === 1 ? $normalized : '';
+}
+
+function crm_google_tag_manager_id(): string
+{
+    $settings = crm_read_settings();
+    return crm_normalize_gtm_id((string) ($settings['google_tag_manager_id'] ?? ''));
+}

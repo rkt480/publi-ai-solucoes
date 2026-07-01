@@ -50,6 +50,29 @@ function lead_origin_summary(array $lead): string
 
     return 'Direto ou sem UTM';
 }
+
+function lead_answer(array $lead, string $field): string
+{
+    $answer = trim((string) ($lead[$field] ?? ''));
+
+    return $answer !== '' ? $answer : 'Não informado';
+}
+
+function lead_whatsapp_status_label(array $lead): string
+{
+    $status = (string) ($lead['whatsapp_status'] ?? 'pendente');
+    $labels = [
+        'pendente' => 'Aguardando notificação interna',
+        'notifica_enviada' => 'Notificação interna enviada',
+        'notifica_falhou' => 'Notificação interna falhou',
+        'notifica_sem_numero' => 'Número interno não configurado',
+        'nao_configurado' => 'BTZap não configurado',
+        'falhou' => 'Falhou',
+        'enviado' => 'Mensagem enviada',
+    ];
+
+    return $labels[$status] ?? $status;
+}
 ?>
 <!doctype html>
 <html lang="pt-BR">
@@ -58,7 +81,7 @@ function lead_origin_summary(array $lead): string
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="csrf-token" content="<?= htmlspecialchars(crm_csrf_token()) ?>" />
     <title>CRM de Leads | <?= htmlspecialchars((string) $config['company_name']) ?></title>
-    <link rel="stylesheet" href="./assets/crm.css?v=20260621-5" />
+    <link rel="stylesheet" href="./assets/crm.css?v=20260701-1900" />
   </head>
   <body>
     <div class="app-shell">
@@ -75,6 +98,7 @@ function lead_origin_summary(array $lead): string
           <nav class="topbar-nav" aria-label="Áreas do CRM">
             <a class="active" href="index.php">Leads</a>
             <a href="followups.php">Follow-up</a>
+            <a href="settings.php">Configurações</a>
           </nav>
         </header>
 
@@ -135,7 +159,7 @@ function lead_origin_summary(array $lead): string
                     <div class="lead-main">
                       <div>
                         <h2><?= htmlspecialchars((string) ($lead['name'] ?? 'Sem nome')) ?></h2>
-                        <p><?= htmlspecialchars((string) ($lead['company'] ?? '')) ?> · <?= htmlspecialchars((string) ($lead['segment'] ?? '')) ?></p>
+                        <p><?= htmlspecialchars((string) ($lead['company'] ?? '')) ?> · <?= htmlspecialchars(lead_answer($lead, 'message')) ?></p>
                       </div>
                     </div>
 
@@ -163,7 +187,7 @@ function lead_origin_summary(array $lead): string
                           <div>
                             <p class="eyebrow">Detalhes do lead</p>
                             <h2><?= htmlspecialchars((string) ($lead['name'] ?? 'Sem nome')) ?> | <?= htmlspecialchars((string) ($lead['company'] ?? 'Empresa não informada')) ?></h2>
-                            <span><?= htmlspecialchars((string) ($lead['segment'] ?? 'Segmento não informado')) ?> · <?= htmlspecialchars(lead_origin_summary($lead)) ?></span>
+                            <span><?= htmlspecialchars(lead_answer($lead, 'message')) ?> · <?= htmlspecialchars(lead_origin_summary($lead)) ?></span>
                           </div>
                           <button class="modal-close details-toggle" type="button" data-toggle-details>×</button>
                         </header>
@@ -171,6 +195,7 @@ function lead_origin_summary(array $lead): string
                         <div class="lead-modal-body">
                           <aside class="lead-modal-tabs" aria-label="Seções do lead">
                             <button class="active" type="button" data-lead-tab="dados">Dados do lead</button>
+                            <button type="button" data-lead-tab="qualificacao">Qualificação</button>
                             <button type="button" data-lead-tab="origem">Origem e UTM</button>
                             <button type="button" data-lead-tab="observacoes">Observações</button>
                             <button type="button" data-lead-tab="followup">Follow-up</button>
@@ -185,23 +210,37 @@ function lead_origin_summary(array $lead): string
                           <dd><?= htmlspecialchars((string) ($lead['whatsapp'] ?? '')) ?></dd>
                         </div>
                         <div>
-                          <dt>Anuncia?</dt>
-                          <dd><?= htmlspecialchars((string) ($lead['advertises'] ?? '')) ?></dd>
-                        </div>
-                        <div>
                           <dt>Recebido em</dt>
                           <dd><?= htmlspecialchars(date('d/m/Y H:i', strtotime((string) ($lead['created_at'] ?? 'now')))) ?></dd>
                         </div>
                         <div>
                           <dt>Status WhatsApp</dt>
                           <dd>
-                            <?= htmlspecialchars((string) ($lead['whatsapp_status'] ?? 'pendente')) ?>
+                            <?= htmlspecialchars(lead_whatsapp_status_label($lead)) ?>
                             <?php if (!empty($lead['whatsapp_sent_at'])): ?>
                               em <?= htmlspecialchars(date('d/m/Y H:i', strtotime((string) $lead['whatsapp_sent_at']))) ?>
                             <?php endif; ?>
                           </dd>
                         </div>
                               </dl>
+                            </div>
+
+                            <div class="lead-tab-panel" data-lead-panel="qualificacao" hidden>
+                              <h3>Respostas do lead</h3>
+                              <dl class="lead-details">
+                        <div>
+                          <dt>Site ou landing page</dt>
+                          <dd><?= htmlspecialchars(lead_answer($lead, 'segment')) ?></dd>
+                        </div>
+                        <div>
+                          <dt>Controle dos leads</dt>
+                          <dd><?= htmlspecialchars(lead_answer($lead, 'advertises')) ?></dd>
+                        </div>
+                        <div class="field-wide">
+                          <dt>Maior necessidade hoje</dt>
+                          <dd><?= htmlspecialchars(lead_answer($lead, 'message')) ?></dd>
+                        </div>
+                      </dl>
                             </div>
 
                             <div class="lead-tab-panel" data-lead-panel="origem" hidden>
@@ -292,6 +331,6 @@ function lead_origin_summary(array $lead): string
     </main>
       </div>
     </div>
-    <script src="./assets/crm.js?v=20260624-1"></script>
+    <script src="./assets/crm.js?v=20260701-1900"></script>
   </body>
 </html>

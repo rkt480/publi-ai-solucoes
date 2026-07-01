@@ -531,7 +531,7 @@ function crm_update_whatsapp_status(string $id, string $status, ?string $error =
     $stmt->execute([
         'id' => $id,
         'status' => $status,
-        'sent_at' => $status === 'enviado' ? date('Y-m-d H:i:s') : null,
+        'sent_at' => in_array($status, ['enviado', 'notifica_enviada'], true) ? date('Y-m-d H:i:s') : null,
         'error' => $error,
         'updated_at' => date('Y-m-d H:i:s'),
     ]);

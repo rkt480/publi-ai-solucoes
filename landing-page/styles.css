@@ -782,6 +782,15 @@ textarea:focus {
   display: block;
 }
 
+.whatsapp-confirm {
+  justify-content: center;
+  margin-top: 12px;
+}
+
+.whatsapp-confirm[hidden] {
+  display: none;
+}
+
 .site-footer {
   display: grid;
   gap: 6px;

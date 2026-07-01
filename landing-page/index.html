@@ -14,7 +14,7 @@
       href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
       rel="stylesheet"
     />
-    <link rel="stylesheet" href="./styles.css?v=20260627-1" />
+    <link rel="stylesheet" href="./styles.css?v=20260701-1900" />
 
     <!-- Pixel/tag de conversao: inserir aqui scripts do Google Ads, Meta Pixel, GA4 ou Tag Manager. -->
   </head>
@@ -310,30 +310,42 @@
 
           <fieldset class="wizard-step" data-step="3">
             <label>
-              Qual é o segmento do seu negócio?
-              <input type="text" name="segment" placeholder="Ex: clínica, imobiliária, serviços" />
+              Hoje você já tem site ou landing page?
+              <select name="segment" required>
+                <option value="">Selecione</option>
+                <option value="Não tenho">Não tenho</option>
+                <option value="Tenho, mas não gera leads">Tenho, mas não gera leads</option>
+                <option value="Tenho e quero melhorar">Tenho e quero melhorar</option>
+                <option value="Estou começando agora">Estou começando agora</option>
+              </select>
             </label>
           </fieldset>
 
           <fieldset class="wizard-step" data-step="4">
             <label>
-              Você já anuncia na internet?
+              Como você controla os leads que chegam hoje?
               <select name="advertises" required>
                 <option value="">Selecione</option>
-                <option value="sim">Sim</option>
-                <option value="nao">Não</option>
+                <option value="Só pelo WhatsApp">Só pelo WhatsApp</option>
+                <option value="Planilha">Planilha</option>
+                <option value="CRM">CRM</option>
+                <option value="Não tenho controle organizado">Não tenho controle organizado</option>
+                <option value="Recebo poucos leads ainda">Recebo poucos leads ainda</option>
               </select>
             </label>
           </fieldset>
 
           <fieldset class="wizard-step" data-step="5">
             <label>
-              O que você quer melhorar na captação hoje?
-              <textarea
-                name="message"
-                rows="4"
-                placeholder="Conte rapidamente o que você precisa"
-              ></textarea>
+              O que você mais precisa melhorar hoje?
+              <select name="message" required>
+                <option value="">Selecione</option>
+                <option value="Captar mais leads">Captar mais leads</option>
+                <option value="Responder os leads mais rápido">Responder os leads mais rápido</option>
+                <option value="Organizar os contatos">Organizar os contatos</option>
+                <option value="Acompanhar propostas e vendas">Acompanhar propostas e vendas</option>
+                <option value="Criar uma estrutura para anunciar">Criar uma estrutura para anunciar</option>
+              </select>
             </label>
           </fieldset>
 
@@ -348,6 +360,9 @@
           <p class="form-success" id="formSuccess" role="status" aria-live="polite">
             Recebemos seu cadastro! Em breve nossa equipe vai entrar em contato.
           </p>
+          <a class="btn btn-primary whatsapp-confirm" id="whatsappConfirm" href="#" target="_blank" rel="noopener" hidden>
+            Confirmar pelo WhatsApp
+          </a>
         </form>
       </div>
     </div>
@@ -357,6 +372,6 @@
       <span>Landing pages, sites e CRM para captação comercial.</span>
     </footer>
 
-    <script src="./script.js?v=20260623-1"></script>
+    <script src="./script.js?v=20260701-1900"></script>
   </body>
 </html>

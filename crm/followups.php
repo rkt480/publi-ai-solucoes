@@ -36,7 +36,7 @@ function human_delay(int $minutes): string
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="csrf-token" content="<?= htmlspecialchars(crm_csrf_token()) ?>" />
     <title>Fluxos de Follow-up | CRM</title>
-    <link rel="stylesheet" href="./assets/crm.css?v=20260621-5" />
+    <link rel="stylesheet" href="./assets/crm.css?v=20260701-1900" />
   </head>
   <body>
     <div class="app-shell">
@@ -53,6 +53,7 @@ function human_delay(int $minutes): string
           <nav class="topbar-nav" aria-label="Áreas do CRM">
             <a href="index.php">Leads</a>
             <a class="active" href="followups.php">Follow-up</a>
+            <a href="settings.php">Configurações</a>
           </nav>
         </header>
 
@@ -193,6 +194,6 @@ function human_delay(int $minutes): string
     </template>
       </div>
     </div>
-    <script src="./assets/followups.js?v=20260624-3"></script>
+    <script src="./assets/followups.js?v=20260701-1900"></script>
   </body>
 </html>

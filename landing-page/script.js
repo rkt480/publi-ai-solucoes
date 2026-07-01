@@ -1,16 +1,22 @@
-function getWebhookUrl() {
+function getCrmApiUrl(endpoint) {
   const host = window.location.hostname;
   const isLocal = host === "localhost" || host === "127.0.0.1" || host === "";
 
   if (isLocal) {
-    return "/publiaisolucoes/publi-ai-solucoes/crm/api/leads.php";
+    return `/publiaisolucoes/publi-ai-solucoes/crm/api/${endpoint}`;
   }
 
-  return "/crm/api/leads.php";
+  return `/crm/api/${endpoint}`;
 }
 
+function getWebhookUrl() {
+  return getCrmApiUrl("leads.php");
+}
+
+let confirmationWhatsAppNumber = "";
 const leadForm = document.querySelector("#leadForm");
 const formSuccess = document.querySelector("#formSuccess");
+const whatsappConfirm = document.querySelector("#whatsappConfirm");
 const modal = document.querySelector("#lead-modal");
 const openButtons = document.querySelectorAll("[data-open-form]");
 const closeButtons = document.querySelectorAll("[data-close-form]");
@@ -54,6 +60,59 @@ function getFormPayload(form) {
   };
 }
 
+function getWhatsAppConfirmationUrl(payload) {
+  if (!confirmationWhatsAppNumber) {
+    return "";
+  }
+
+  const number = confirmationWhatsAppNumber.replace(/\D+/g, "");
+
+  if (number.length < 12) {
+    return "";
+  }
+
+  const message = `Olá! Me cadastrei na landing page da Publi AI Soluções e quero confirmar meu atendimento. Meu nome é ${payload.name || ""}.`;
+  return `https://wa.me/${number}?text=${encodeURIComponent(message)}`;
+}
+
+function setWhatsAppConfirmState(payload = null) {
+  if (!whatsappConfirm) {
+    return;
+  }
+
+  const confirmationUrl = payload ? getWhatsAppConfirmationUrl(payload) : "";
+
+  if (confirmationUrl) {
+    whatsappConfirm.href = confirmationUrl;
+    whatsappConfirm.textContent = "Confirmar pelo WhatsApp";
+    whatsappConfirm.hidden = false;
+    return;
+  }
+
+  whatsappConfirm.href = "#";
+  whatsappConfirm.hidden = true;
+}
+
+async function loadPublicConfig() {
+  try {
+    const response = await fetch(getCrmApiUrl("public-config.php"), {
+      headers: {
+        Accept: "application/json",
+      },
+    });
+
+    if (!response.ok) {
+      return;
+    }
+
+    const data = await response.json();
+    confirmationWhatsAppNumber = String(data.whatsapp_number || "");
+    setWhatsAppConfirmState();
+  } catch (error) {
+    console.error("Não foi possível carregar o número de WhatsApp.", error);
+  }
+}
+
 function updateWizard() {
   steps.forEach((step, index) => {
     step.classList.toggle("is-active", index === currentStep);
@@ -83,6 +142,9 @@ function openModal(event) {
   leadForm.classList.remove("is-submitted");
   leadForm.reset();
   formSuccess.classList.remove("is-visible");
+  if (whatsappConfirm) {
+    setWhatsAppConfirmState();
+  }
   updateWizard();
 }
 
@@ -158,6 +220,8 @@ leadForm.addEventListener("submit", async (event) => {
 
   try {
     await sendLeadToWebhook(payload);
+    setWhatsAppConfirmState(payload);
+
     leadForm.reset();
     currentStep = 0;
     updateWizard();
@@ -174,4 +238,5 @@ leadForm.addEventListener("submit", async (event) => {
   }
 });
 
+loadPublicConfig();
 updateWizard();

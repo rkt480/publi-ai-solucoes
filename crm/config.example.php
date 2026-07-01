@@ -21,7 +21,12 @@ return [
         'enabled' => false,
         'base_url' => 'https://server.btzap.com.br',
         'token' => 'COLE_SEU_TOKEN_AQUI',
+        'typing_presence' => true,
+        'typing_delay' => 30000,
         'delay' => 1200,
+        'internal_notification_number' => '55DDDNUMERO',
+        'public_whatsapp_number' => '55DDDNUMERO',
+        'internal_notification_message' => "Novo lead recebido:\n\nNome: {{name}}\nWhatsApp: {{whatsapp}}\nEmpresa: {{company}}\nSite/Landing: {{segment}}\nControle dos leads: {{advertises}}\nNecessidade: {{message}}",
         'lead_message' => "Olá, {{name}}! Recebemos seu cadastro para demonstração da estrutura de landing page com CRM.\n\nEm breve vamos entrar em contato.",
     ],
 ];

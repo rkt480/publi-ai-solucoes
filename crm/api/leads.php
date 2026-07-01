@@ -35,7 +35,7 @@ if (crm_throttle_is_limited('lead-submit', 'public-form', 6, 600)) {
     exit;
 }
 
-$required = ['name', 'whatsapp', 'company', 'advertises'];
+$required = ['name', 'whatsapp', 'company', 'segment', 'advertises', 'message'];
 
 foreach ($required as $field) {
     if (trim((string) ($payload[$field] ?? '')) === '') {

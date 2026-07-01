@@ -13,7 +13,7 @@ header('Content-Type: text/csv; charset=utf-8');
 header('Content-Disposition: attachment; filename="leads-publi-ai.csv"');
 
 $output = fopen('php://output', 'w');
-fputcsv($output, ['Nome', 'WhatsApp', 'Empresa', 'Segmento', 'Anuncia', 'Status', 'Mensagem', 'Observações', 'Recebido em']);
+fputcsv($output, ['Nome', 'WhatsApp', 'Empresa', 'Site/Landing', 'Controle dos leads', 'Maior necessidade', 'Status', 'Observações', 'Recebido em']);
 
 foreach ($leads as $lead) {
     fputcsv($output, [
@@ -22,8 +22,8 @@ foreach ($leads as $lead) {
         $lead['company'] ?? '',
         $lead['segment'] ?? '',
         $lead['advertises'] ?? '',
-        $lead['status'] ?? '',
         $lead['message'] ?? '',
+        $lead['status'] ?? '',
         $lead['notes'] ?? '',
         $lead['created_at'] ?? '',
     ]);

@@ -6,6 +6,27 @@ require_once __DIR__ . '/lib/auth.php';
 require_once __DIR__ . '/lib/storage.php';
 require_once __DIR__ . '/lib/btzap.php';
 
+$lockHandle = @fopen(__DIR__ . '/data/followups.lock', 'c');
+
+if ($lockHandle === false || !flock($lockHandle, LOCK_EX | LOCK_NB)) {
+    $result = [
+        'processed' => 0,
+        'sent' => 0,
+        'failed' => 0,
+        'skipped' => 'Processador já está em execução.',
+    ];
+
+    if (($_POST['ajax'] ?? $_GET['ajax'] ?? '') === '1') {
+        header('Content-Type: application/json; charset=utf-8');
+        echo json_encode($result);
+        exit;
+    }
+
+    header('Content-Type: text/plain; charset=utf-8');
+    echo "Follow-ups já estão em processamento.\n";
+    exit;
+}
+
 if (PHP_SAPI !== 'cli') {
     crm_require_login();
 
@@ -80,6 +101,8 @@ if (($_POST['debug'] ?? $_GET['debug'] ?? '') === '1') {
 if (($_POST['ajax'] ?? $_GET['ajax'] ?? '') === '1') {
     header('Content-Type: application/json; charset=utf-8');
     echo json_encode($result);
+    flock($lockHandle, LOCK_UN);
+    fclose($lockHandle);
     exit;
 }
 
@@ -87,3 +110,6 @@ header('Content-Type: text/plain; charset=utf-8');
 echo "Follow-ups processados: {$result['processed']}\n";
 echo "Enviados: {$result['sent']}\n";
 echo "Falharam: {$result['failed']}\n";
+
+flock($lockHandle, LOCK_UN);
+fclose($lockHandle);

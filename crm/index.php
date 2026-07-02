@@ -81,7 +81,7 @@ function lead_whatsapp_status_label(array $lead): string
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="csrf-token" content="<?= htmlspecialchars(crm_csrf_token()) ?>" />
     <title>CRM de Leads | <?= htmlspecialchars((string) $config['company_name']) ?></title>
-    <link rel="stylesheet" href="./assets/crm.css?v=20260701-1900" />
+    <link rel="stylesheet" href="./assets/crm.css?v=20260701-compact-headers" />
   </head>
   <body>
     <div class="app-shell">

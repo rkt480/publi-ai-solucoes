@@ -36,7 +36,7 @@ function human_delay(int $minutes): string
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="csrf-token" content="<?= htmlspecialchars(crm_csrf_token()) ?>" />
     <title>Fluxos de Follow-up | CRM</title>
-    <link rel="stylesheet" href="./assets/crm.css?v=20260701-1900" />
+    <link rel="stylesheet" href="./assets/crm.css?v=20260701-compact-headers" />
   </head>
   <body>
     <div class="app-shell">
@@ -106,6 +106,13 @@ function human_delay(int $minutes): string
               </div>
               <label>
                 Mensagem
+                <div class="emoji-picker" data-emoji-picker>
+                  <button class="emoji-picker-toggle" type="button" data-emoji-toggle title="Abrir emojis">😀</button>
+                  <div class="emoji-picker-panel" data-emoji-panel hidden>
+                    <input type="search" data-emoji-search placeholder="Buscar emoji" autocomplete="off" />
+                    <div class="emoji-picker-grid" data-emoji-grid aria-label="Emojis"></div>
+                  </div>
+                </div>
                 <textarea name="steps[0][message]" rows="4" placeholder="Ex: Oi {{name}}, vi que você pediu uma demonstração. Posso te mostrar como funciona?"></textarea>
               </label>
             </article>
@@ -188,12 +195,19 @@ function human_delay(int $minutes): string
         </div>
         <label>
           Mensagem
+          <div class="emoji-picker" data-emoji-picker>
+            <button class="emoji-picker-toggle" type="button" data-emoji-toggle title="Abrir emojis">😀</button>
+            <div class="emoji-picker-panel" data-emoji-panel hidden>
+              <input type="search" data-emoji-search placeholder="Buscar emoji" autocomplete="off" />
+              <div class="emoji-picker-grid" data-emoji-grid aria-label="Emojis"></div>
+            </div>
+          </div>
           <textarea data-name="message" rows="4" placeholder="Digite a mensagem do follow-up"></textarea>
         </label>
       </article>
     </template>
       </div>
     </div>
-    <script src="./assets/followups.js?v=20260701-1900"></script>
+    <script src="./assets/followups.js?v=20260701-emoji-picker"></script>
   </body>
 </html>

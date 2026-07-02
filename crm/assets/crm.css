@@ -176,15 +176,16 @@ a {
   align-items: flex-end;
   justify-content: space-between;
   gap: 20px;
-  padding: 12px 10px 22px;
+  padding: 8px 10px 18px;
 }
 
 .app-header h1 {
   margin: 0;
   max-width: 760px;
-  font-size: clamp(1.65rem, 3vw, 2.55rem);
+  font-size: clamp(1.35rem, 2.2vw, 2rem);
+  font-weight: 900;
   letter-spacing: 0;
-  line-height: 1.08;
+  line-height: 1.12;
 }
 
 .auth-card h1 {
@@ -234,11 +235,11 @@ button:hover,
 }
 
 .eyebrow {
-  margin: 0 0 10px;
+  margin: 0 0 6px;
   color: var(--cyan);
-  font-size: 0.78rem;
+  font-size: 0.68rem;
   font-weight: 950;
-  letter-spacing: 0.14em;
+  letter-spacing: 0.12em;
   text-transform: uppercase;
 }
 
@@ -847,6 +848,72 @@ textarea:focus {
 .flow-step-header {
   grid-template-columns: 1fr auto;
   align-items: center;
+}
+
+.emoji-picker {
+  position: relative;
+  width: max-content;
+}
+
+.emoji-picker-toggle,
+.emoji-picker-grid button {
+  display: grid;
+  width: 34px;
+  min-height: 34px;
+  padding: 0;
+  place-items: center;
+  background: #fff;
+  border: 1px solid rgba(148, 163, 184, 0.32);
+  border-radius: 10px;
+  box-shadow: none;
+  color: var(--text);
+  font-size: 1rem;
+  line-height: 1;
+}
+
+.emoji-picker-toggle:hover,
+.emoji-picker-toggle:focus,
+.emoji-picker-grid button:hover,
+.emoji-picker-grid button:focus {
+  border-color: var(--blue);
+  outline: 3px solid rgba(37, 99, 235, 0.1);
+  transform: none;
+}
+
+.emoji-picker-panel {
+  position: absolute;
+  z-index: 20;
+  top: calc(100% + 8px);
+  left: 0;
+  display: grid;
+  width: min(318px, calc(100vw - 48px));
+  max-height: 292px;
+  gap: 10px;
+  padding: 12px;
+  background: #fff;
+  border: 1px solid rgba(148, 163, 184, 0.24);
+  border-radius: 16px;
+  box-shadow: 0 22px 48px rgba(15, 23, 42, 0.16);
+}
+
+.emoji-picker-panel[hidden] {
+  display: none;
+}
+
+.emoji-picker-panel input {
+  min-height: 38px;
+  padding: 9px 11px;
+  border-radius: 12px;
+  font-size: 0.9rem;
+}
+
+.emoji-picker-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 34px);
+  max-height: 202px;
+  gap: 6px;
+  overflow-y: auto;
+  padding: 2px 2px 4px;
 }
 
 .remove-step {
